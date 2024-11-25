@@ -1,0 +1,409 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    overflow: auto;
+    color: #333;
+    line-height: 1.6;
+    background-color: #f5f5f5;
+}
+
+header {
+    text-align: center;
+    padding: 20px;
+    position: relative;
+    z-index: 1;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    margin-bottom: 40px;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 2.5em;
+    color: #2c3e50;
+    letter-spacing: 2px;
+}
+
+#photo-carousel {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60vh;
+    position: relative;
+    z-index: 1;
+    padding: 40px 0;
+    background-color: #fff;
+    margin: 40px 0;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.carousel {
+    display: flex;
+    overflow: hidden;
+    width: 80%;
+    max-width: 1200px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.carousel-item {
+    min-width: 100%;
+    transition: transform 0.5s ease;
+    padding: 20px;
+    text-align: center;
+}
+
+.video-container {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 30px;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.video-container video {
+    width: 100%;
+    max-width: 100%;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    margin-bottom: 20px;
+    position: relative;
+    z-index: 2;
+}
+
+#restartVideoBtn {
+    padding: 12px 24px;
+    border-radius: 6px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    position: relative;
+    z-index: 2;
+}
+
+#restartVideoBtn:hover {
+    background-color: #2980b9;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+}
+
+#social-media-links {
+    text-align: center;
+    padding: 30px 20px;
+    margin: 40px 0;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+#social-media-links a {
+    margin: 0 15px;
+    text-decoration: none;
+    color: #34495e;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    padding: 8px 16px;
+    border-radius: 4px;
+}
+
+#social-media-links a:hover {
+    color: #3498db;
+    background: rgba(52, 152, 219, 0.1);
+    transform: translateY(-2px);
+}
+
+footer {
+    text-align: center;
+    padding: 20px;
+    color: #fff;
+    background-color: #2c3e50;
+    margin-top: 40px;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+}
+
+footer p {
+    margin: 0;
+    font-size: 0.9em;
+    opacity: 0.9;
+}
+
+.music-control {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 200px;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 9998;
+    user-select: none;
+    transform: none;
+}
+
+.drag-handle {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 10px;
+    cursor: move;
+}
+
+.music-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.progress-container {
+    flex-grow: 1;
+    min-width: 100px;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 5px;
+    background-color: #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+    position: relative;
+    margin: 10px 0;
+}
+
+.progress {
+    width: 0;
+    height: 100%;
+    background-color: #4CAF50;
+    border-radius: 5px;
+    transition: width 0.1s linear;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+#currentTime, #duration {
+    font-size: 12px;
+    color: #666;
+    min-width: 45px;
+    text-align: center;
+}
+
+.music-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.music-buttons button {
+    flex: 1;
+    white-space: nowrap;
+    min-width: 80px;
+    padding: 8px 15px;
+    border-radius: 5px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.music-buttons button:hover {
+    background-color: #45a049;
+}
+
+#fireworks {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* 烟花上升轨迹 */
+.firework-trail {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    animation: rise 1s ease-out;
+}
+
+@keyframes rise {
+    0% {
+        transform: translateY(100vh);
+        opacity: 1;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(var(--targetY));
+        opacity: 0;
+    }
+}
+
+/* 爆炸的火花 */
+.spark {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    animation: spark 0.9s ease-out forwards;
+}
+
+@keyframes spark {
+    0% {
+        transform: scale(1) rotate(0deg) translateY(0);
+        opacity: 1;
+    }
+    70% {
+        opacity: 1;
+    }
+    100% {
+        transform: scale(0.1) rotate(var(--rotation)) translate(var(--distance));
+        opacity: 0;
+    }
+}
+
+/* 火花的尾迹效果 */
+.spark::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    filter: blur(1px);
+    animation: fade 0.9s ease-out forwards;
+}
+
+@keyframes fade {
+    0% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(0.5);
+    }
+}
+
+canvas {
+    display: block;
+    background: transparent !important;
+}
+
+/* 关于我区域 */
+#about {
+    background-color: #fff;
+    padding: 30px 20px;
+    margin: 0 auto 40px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    max-width: 1200px;
+}
+
+#about h2 {
+    color: #2c3e50;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+/* 关于我区域样式 */
+#about .content {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.about-info, .about-skills {
+    margin-bottom: 30px;
+}
+
+.about-info h3, .about-skills h3 {
+    color: #34495e;
+    margin-bottom: 15px;
+}
+
+.about-info p {
+    margin-bottom: 15px;
+    line-height: 1.8;
+}
+
+.about-skills ul {
+    list-style: none;
+    padding: 0;
+}
+
+.about-skills li {
+    display: inline-block;
+    margin: 10px;
+    padding: 8px 16px;
+    background-color: #f7f9fc;
+    border-radius: 20px;
+    color: #2c3e50;
+}
+
+/* 作品集区域 */
+#portfolio {
+    background-color: #fff;
+    padding: 30px 20px;
+    margin: 0 auto 40px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    max-width: 1200px;
+}
+
+#portfolio h2 {
+    color: #2c3e50;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+/* 作品集区域样式 */
+#portfolio .content {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.portfolio-item {
+    margin-bottom: 30px;
+}
+
+.portfolio-item h3 {
+    color: #34495e;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+.portfolio-item ul {
+    list-style: none;
+    padding: 0;
+}
+
+.portfolio-item li {
+    margin: 15px 0;
+    padding: 10px;
+    background-color: #f7f9fc;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.portfolio-item li:hover {
+    background-color: #eef2f7;
+    transform: translateX(10px);
+} 

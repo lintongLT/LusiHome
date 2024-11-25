@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>林同的个人网站</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- 在body最开始添加canvas -->
+    <canvas id="fireworks" style="background: transparent;"></canvas>
+    
+    <!-- 背景音乐 -->
+    <audio id="background-music" loop autoplay onloadedmetadata="setDuration()">
+        <source src="resource/Last Dance.mp3" type="audio/mp3">
+        您的浏览器不支持音频元素。
+    </audio>
+    
+    <!-- 音乐控制按钮和进度条 -->
+    <div class="music-control" id="draggableMusic">
+        <div class="drag-handle"></div>
+        <div class="music-info">
+            <span id="currentTime">0:00</span>
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress" id="musicProgress"></div>
+                </div>
+            </div>
+            <span id="duration">0:00</span>
+        </div>
+        <div class="music-buttons">
+            <button onclick="toggleMusic()" id="musicBtn">暂停音乐</button>
+            <button onclick="restartMusic()" id="restartMusicBtn">重新播放</button>
+        </div>
+    </div>
+
+    <!-- 页面头部 -->
+    <header>
+        <h1>林同</h1>
+    </header>
+
+    <!-- 关于我区域 -->
+    <section id="about">
+        <h2>关于我</h2>
+        <div class="content">
+            <div class="about-info">
+                <h3>个人简介</h3>
+                <p>大家好，我是林同。热爱音乐创作和表演的年轻音乐人。</p>
+                <p>擅长钢琴演奏和音乐制作，致力于创作富有情感和故事性的音乐作品。</p>
+            </div>
+            <div class="about-skills">
+                <h3>专业技能</h3>
+                <ul>
+                    <li>钢琴演奏</li>
+                    <li>音乐创作</li>
+                    <li>编曲制作</li>
+                    <li>音乐教学</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- 作品集区域 -->
+    <section id="portfolio">
+        <h2>作品集</h2>
+        <div class="content">
+            <div class="portfolio-item">
+                <h3>原创音乐</h3>
+                <ul>
+                    <li>《听说你》- 2024年原创单曲</li>
+                    <li>《Last Dance》- 钢琴曲</li>
+                </ul>
+            </div>
+            <div class="portfolio-item">
+                <h3>音乐作品</h3>
+                <ul>
+                    <li>钢琴演奏视频合集</li>
+                    <li>原创音乐专辑</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- 视频展示区域 -->
+    <section id="video-section">
+        <div class="video-container">
+            <video width="100%" controls id="mainVideo">
+                <source src="resource/听说你.mp4" type="video/mp4">
+                您的浏览器不支持视频播放。
+            </video>
+            <button onclick="restartVideo()" id="restartVideoBtn">重新播放视频</button>
+        </div>
+    </section>
+
+    <!-- 照片展示区域 -->
+    <section id="photo-carousel">
+        <div class="carousel">
+            <div class="carousel-item">照片1</div>
+            <div class="carousel-item">照片2</div>
+            <div class="carousel-item">照片3</div>
+        </div>
+    </section>
+
+    <!-- 社交媒体链接区域 -->
+    <section id="social-media-links">
+        <a href="https://instagram.com" target="_blank">Instagram</a>
+        <a href="https://linkedin.com" target="_blank">LinkedIn</a>
+        <a href="https://twitter.com" target="_blank">Twitter</a>
+        <a href="https://facebook.com" target="_blank">Facebook</a>
+    </section>
+
+    <!-- 底部版权信息 -->
+    <footer>
+        <p>© 2024 林同，版权所有</p>
+    </footer>
+
+    <!-- JavaScript 代码 -->
+    <script>
+        // 获取音频和视频元素
+        const music = document.getElementById('background-music');
+        const video = document.getElementById('mainVideo');
+        const musicBtn = document.getElementById('musicBtn');
+        
+        // 记录音乐和视频的播放位置
+        let musicTime = 0;
+        let videoTime = 0;
+
+        // 页面加载时自动播放音乐
+        window.onload = function() {
+            music.play().catch(function(error) {
+                console.log("自动播放失败：", error);
+                musicBtn.textContent = '播放音乐';
+            });
+        }
+
+        // 音乐控制函数
+        function toggleMusic() {
+            if (music.paused) {
+                // 从记录的时间点继续播放音乐
+                music.currentTime = musicTime;
+                music.play();
+                
+                // 暂停视频并记录视频位置
+                videoTime = video.currentTime;
+                video.pause();
+                
+                musicBtn.textContent = '暂停音乐';
+            } else {
+                // 暂停音乐并记录位置
+                musicTime = music.currentTime;
+                music.pause();
+                musicBtn.textContent = '播放音乐';
+            }
+        }
+
+        // 视频播放时停止音乐
+        video.addEventListener('play', function() {
+            // 记录音乐位置并暂停
+            musicTime = music.currentTime;
+            music.pause();
+            
+            // 从记录的位置继续播放视频
+            video.currentTime = videoTime;
+            musicBtn.textContent = '播放音乐';
+        });
+
+        // 视频暂停时恢复音乐
+        video.addEventListener('pause', function() {
+            // 记录视频位置
+            videoTime = video.currentTime;
+            
+            // 只有当视频是由用户手动暂停时才播放音乐
+            if (!music.playing) {
+                // 从记录的位置继续播放音乐
+                music.currentTime = musicTime;
+                music.play();
+                musicBtn.textContent = '暂停音乐';
+            }
+        });
+
+        // 视频束时恢复音乐
+        video.addEventListener('ended', function() {
+            videoTime = 0; // 视频结束，重置视频时间
+            // 从记录的位置继续播放音乐
+            music.currentTime = musicTime;
+            music.play();
+            musicBtn.textContent = '暂停音乐';
+        });
+
+        // 记录音乐播放位置
+        music.addEventListener('pause', function() {
+            musicTime = music.currentTime;
+        });
+
+        // 记录视频播放位置
+        video.addEventListener('pause', function() {
+            videoTime = video.currentTime;
+        });
+
+        // 添加重新播放音乐的函数
+        function restartMusic() {
+            musicTime = 0;
+            music.currentTime = 0;
+            music.play();
+            
+            // 暂停视频
+            videoTime = video.currentTime;
+            video.pause();
+            
+            musicBtn.textContent = '暂停音乐';
+        }
+
+        // 添加重新播放视频的函数
+        function restartVideo() {
+            videoTime = 0;
+            video.currentTime = 0;
+            video.play();
+            
+            // 暂停音乐
+            musicTime = music.currentTime;
+            music.pause();
+            musicBtn.textContent = '播放音乐';
+        }
+
+        // 获取进度条相关元素
+        const progressBar = document.querySelector('.progress-bar');
+        const progress = document.getElementById('musicProgress');
+        const currentTimeSpan = document.getElementById('currentTime');
+        const durationSpan = document.getElementById('duration');
+
+        // 格式化时间
+        function formatTime(seconds) {
+            if (!seconds || isNaN(seconds)) return "0:00";
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = Math.floor(seconds % 60);
+            return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+        }
+
+        // 更新进度条和时间显示
+        music.addEventListener('timeupdate', function() {
+            if (music.duration) {
+                const percent = (music.currentTime / music.duration) * 100;
+                progress.style.width = percent + '%';
+                currentTimeSpan.textContent = formatTime(music.currentTime);
+                // 确保总时长也被正确显示
+                durationSpan.textContent = formatTime(music.duration);
+            }
+        });
+
+        // 音频加载完成后显示总时长
+        music.addEventListener('loadedmetadata', function() {
+            durationSpan.textContent = formatTime(music.duration);
+        });
+
+        // 添加错误处理
+        music.addEventListener('error', function(e) {
+            console.error('音频加载错误：', e);
+            durationSpan.textContent = "0:00";
+        });
+
+        // 点击进度条跳转
+        progressBar.addEventListener('click', function(e) {
+            const rect = progressBar.getBoundingClientRect();
+            const percent = (e.clientX - rect.left) / rect.width;
+            music.currentTime = percent * music.duration;
+            musicTime = music.currentTime; // 更新记录的时间
+            
+            // 添加以下代码来更新按钮状态
+            if (music.paused) {
+                music.play();
+            }
+            musicBtn.textContent = '暂停音乐';
+        });
+
+        // 添加拖拽功能
+        const draggableMusic = document.getElementById('draggableMusic');
+        const dragHandle = document.querySelector('.drag-handle');
+        let isDragging = false;
+        let startX;
+        let startY;
+        let startLeft;
+        let startTop;
+
+        dragHandle.addEventListener('mousedown', dragStart);
+        document.addEventListener('mousemove', drag);
+        document.addEventListener('mouseup', dragEnd);
+
+        function dragStart(e) {
+            if (e.target === dragHandle) {
+                isDragging = true;
+                const rect = draggableMusic.getBoundingClientRect();
+                startX = e.clientX;
+                startY = e.clientY;
+                startLeft = rect.left;
+                startTop = rect.top;
+                draggableMusic.style.transition = 'none';
+            }
+        }
+
+        function drag(e) {
+            if (isDragging) {
+                e.preventDefault();
+                
+                const deltaX = e.clientX - startX;
+                const deltaY = e.clientY - startY;
+                
+                let newLeft = startLeft + deltaX;
+                let newTop = startTop + deltaY;
+
+                // 获取窗口和元素尺寸
+                const windowWidth = window.innerWidth;
+                const windowHeight = window.innerHeight;
+                const elementWidth = draggableMusic.offsetWidth;
+                const elementHeight = draggableMusic.offsetHeight;
+
+                // 应用新位置
+                draggableMusic.style.left = newLeft + 'px';
+                draggableMusic.style.top = newTop + 'px';
+            }
+        }
+
+        function dragEnd(e) {
+            if (!isDragging) return;
+            isDragging = false;
+
+            // 获取窗口和元素尺寸
+            const windowWidth = window.innerWidth;
+            const windowHeight = window.innerHeight;
+            const elementWidth = draggableMusic.offsetWidth;
+            const elementHeight = draggableMusic.offsetHeight;
+            const margin = 20;
+
+            // 获取当前位置
+            const rect = draggableMusic.getBoundingClientRect();
+            let newLeft = rect.left;
+            let newTop = rect.top;
+
+            // 检查是否需要调整位置
+            if (rect.right > windowWidth - margin) {
+                newLeft = windowWidth - elementWidth - margin;
+            }
+            if (rect.left < margin) {
+                newLeft = margin;
+            }
+            if (rect.bottom > windowHeight - margin) {
+                newTop = windowHeight - elementHeight - margin;
+            }
+            if (rect.top < margin) {
+                newTop = margin;
+            }
+
+            // 应用调整后的位置
+            draggableMusic.style.transition = 'all 0.2s ease-out';
+            draggableMusic.style.left = newLeft + 'px';
+            draggableMusic.style.top = newTop + 'px';
+
+            setTimeout(() => {
+                draggableMusic.style.transition = 'none';
+            }, 200);
+        }
+
+        // 添加键盘事件监听
+        document.addEventListener('keydown', function(e) {
+            // 检查是否按下空格键，并且不是在输入框中
+            if (e.code === 'Space' && e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
+                e.preventDefault(); // 阻止空格键的默认行为（例如页面滚动）
+                toggleMusic(); // 调用已有的音乐控制函数
+            }
+        });
+
+        // 烟花效果
+        const canvas = document.getElementById('fireworks');
+        const ctx = canvas.getContext('2d');
+
+        // 设置canvas尺寸
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        // 修改 FireworkShell 类
+        class FireworkShell {
+            constructor(x) {
+                this.x = x;
+                this.y = canvas.height;
+                this.size = 3;  // 增大烟花大小
+                this.velocity = {
+                    x: (Math.random() - 0.5) * 1,  // 减小水平移动
+                    y: -Math.random() * 8 - 20     // 增加上升速度
+                };
+                this.gravity = 0.15;  // 减小重力影响
+                this.color = `hsl(${Math.random() * 360}, 100%, 60%)`; // 更亮的颜色
+                this.exploded = false;
+                this.particles = [];
+            }
+
+            update() {
+                if (!this.exploded) {
+                    this.velocity.y += this.gravity;
+                    this.x += this.velocity.x;
+                    this.y += this.velocity.y;
+
+                    // 当上升速度接近0时爆炸
+                    if (this.velocity.y >= -1) {
+                        this.explode();
+                    }
+                }
+            }
+
+            explode() {
+                this.exploded = true;
+                // 创建更多的粒子
+                const particleCount = 150;  // 增加粒子数量
+                const angleStep = (Math.PI * 2) / particleCount;
+                
+                for (let i = 0; i < particleCount; i++) {
+                    const angle = angleStep * i;
+                    // 随机速度
+                    const speed = 8 + Math.random() * 4;
+                    const velocity = {
+                        x: Math.cos(angle) * speed,
+                        y: Math.sin(angle) * speed
+                    };
+                    
+                    // 随机色相偏移
+                    const hue = parseInt(this.color.match(/\d+/)[0]);
+                    const newHue = (hue + Math.random() * 30 - 15) % 360;
+                    const color = `hsl(${newHue}, 50%, 50%)`;
+                    
+                    this.particles.push(new Particle(this.x, this.y, color, velocity));
+                }
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+                
+                // 添加上升轨迹发光效果
+                ctx.shadowBlur = 15;
+                ctx.shadowColor = this.color;
+            }
+        }
+
+        // 修改 Particle 类
+        class Particle {
+            constructor(x, y, color, velocity) {
+                this.x = x;
+                this.y = y;
+                this.color = color;
+                this.velocity = velocity;
+                this.alpha = 1;
+                this.friction = 0.99;  // 增加摩擦力
+                this.gravity = 0.15;   // 减小重力
+                this.life = 1;
+                this.size = 2.5;       // 增大粒子大小
+            }
+
+            update() {
+                this.velocity.x *= this.friction;
+                this.velocity.y *= this.friction;
+                this.velocity.y += this.gravity;
+                this.x += this.velocity.x;
+                this.y += this.velocity.y;
+                this.life *= 0.98;     // 减慢消失速度
+            }
+
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = this.life;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+                
+                // 增强发光效果
+                ctx.shadowBlur = 15;
+                ctx.shadowColor = this.color;
+                
+                ctx.restore();
+            }
+        }
+
+        // 修改主动画循环
+        let fireworks = [];
+        let lastFireworkTime = Date.now();
+
+        function animate() {
+            // 删除这两行：
+            // ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
+            // ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // 替换为完全清除：
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // 自动发射烟花的频率提高
+            const now = Date.now();
+            if (now - lastFireworkTime > 800 + Math.random() * 800) {  // 更频的发射
+                const x = Math.random() * canvas.width;
+                fireworks.push(new FireworkShell(x));
+                lastFireworkTime = now;
+            }
+
+            // 更新和绘制所有烟花
+            for (let i = fireworks.length - 1; i >= 0; i--) {
+                const firework = fireworks[i];
+                firework.update();
+                
+                if (!firework.exploded) {
+                    firework.draw();
+                }
+
+                // 更新和绘制粒子
+                for (let j = firework.particles.length - 1; j >= 0; j--) {
+                    const particle = firework.particles[j];
+                    particle.update();
+                    particle.draw();
+
+                    if (particle.life <= 0.01) {
+                        firework.particles.splice(j, 1);
+                    }
+                }
+
+                if (firework.exploded && firework.particles.length === 0) {
+                    fireworks.splice(i, 1);
+                }
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        // 确保canvas正确初始化
+        function initCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            // 删除这两行：
+            // ctx.fillStyle = 'rgba(255, 255, 255, 0)';
+            // ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
+
+        // 添加窗口大小改变事件
+        window.addEventListener('resize', initCanvas);
+
+        // 初始化并开始动画
+        initCanvas();
+        animate();
+
+        // 添加设置总时长的函数
+        function setDuration() {
+            const durationSpan = document.getElementById('duration');
+            durationSpan.textContent = formatTime(music.duration);
+        }
+        
+        // 确保页面加载时也设置总时长
+        window.addEventListener('load', function() {
+            if (music.duration) {
+                setDuration();
+            }
+        });
+    </script>
+</body>
+</html> 
